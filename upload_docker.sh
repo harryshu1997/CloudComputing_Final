@@ -2,15 +2,15 @@
 # This tags and uploads an image to Docker Hub
 
 #Assumes this is built
-#docker build --tag=flasksklearn .
+#docker build -t doggyclassifier:1.0 .
 
 
-dockerpath="ruixxxx/flasksklearn"
+dockerpath="ruixxxx/doggyclassifier"
 
 # Authenticate & Tag
 echo "Docker ID and Image: $dockerpath"
 docker login &&\
-    docker image tag flasksklearn $dockerpath
+    docker image tag doggyclassifier $dockerpath
 
 # Push Image
 docker image push $dockerpath
