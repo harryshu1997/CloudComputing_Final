@@ -4,11 +4,16 @@ from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
 from tensorflow import keras
 from google.cloud import automl
+# Import the automl credentials
+import json
+with open("AUTOML-Model-d9e9236b7644.json", 'r') as load_f:
+    json.load(load_f)
 
- project_id = "automl-model-293309"
- model_id = "dogs_kaggle_20201027083024"
+# Get the model variables
+project_id = "automl-model-293309"
+model_id = "dogs_kaggle_20201027083024"
  
-
+# Import the doggy prediction model
 prediction_client = automl.PredictionServiceClient()
 
 # Get the full path of the model.
@@ -41,11 +46,14 @@ def process_image(file_path):
         params=params
     )
     response = prediction_client.predict(request=request)
-    print("Prediction results:")
+    #print("Prediction results:")
     for result in response.payload:
-    print("Predicted class name: {}".format(result.display_name))
-    print("Predicted class score: {}".format(result.classification.score))
-    return 
+    #print("Predicted class name: {}".format(result.display_name))
+    #print("Predicted class score: {}".format(result.classification.score))
+        class_name = result.display_name
+        class_score = result.classification.score
+    return render_template('predict.html', label = class_name, score = class_score, img = f.filename)
+    
 
 #@app.route("/")
 #def home():
@@ -69,15 +77,16 @@ def upload():
                 basepath, 'static', secure_filename(f.filename)
             )
             f.save(file_path)
-            
-            image = process_image(file_path)
-             
     return
 
 @app.route("/predict")
 def predict():
-    
-    return "Done"
+    basepath = os.path.dirname(__file__)
+    file_path = os.path.join(
+        basepath, 'static', secure_filename(f.filename)
+    )
+    process_image(file_path)
+    return
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9898, debug=True)
