@@ -4,7 +4,8 @@ FROM python:3.7.3-stretch
 WORKDIR /web
 
 # Copy source code to working directory
-COPY . web.py /web/
+#COPY . web.py, AUTOML-Model-d9e9236b7644.json /web/
+COPY . /web/
 
 # Install packages from requirements.txt
 # hadolint ignore=DL3013

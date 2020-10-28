@@ -6,12 +6,12 @@ from tensorflow import keras
 from google.cloud import automl
 # Import the automl credentials
 import json
-with open("AUTOML-Model-d9e9236b7644.json", 'r') as load_f:
-    json.load(load_f)
+#with open("AUTOML-Model-d9e9236b7644.json", 'r') as load_f:
+#    json.load(load_f)
 
 # Get the model variables
 project_id = "automl-model-293309"
-model_id = "dogs_kaggle_20201027083024"
+model_id = "ICN1182672090231209984"
  
 # Import the doggy prediction model
 prediction_client = automl.PredictionServiceClient()
@@ -27,6 +27,9 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 def allowed_file(filename):
     return '.'in filename and \
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+#global class_name
+#global class_score
 
 # Convert inputted image to an array
 def process_image(file_path):
@@ -50,9 +53,11 @@ def process_image(file_path):
     for result in response.payload:
     #print("Predicted class name: {}".format(result.display_name))
     #print("Predicted class score: {}".format(result.classification.score))
+        global class_name
+        global class_score
         class_name = result.display_name
         class_score = result.classification.score
-    return render_template('predict.html', label = class_name, score = class_score, img = f.filename)
+    return render_template('upload.html', label = class_name, score = class_score, img = f.filename)
     
 
 #@app.route("/")
@@ -77,6 +82,7 @@ def upload():
                 basepath, 'static', secure_filename(f.filename)
             )
             f.save(file_path)
+            process_image(file_path)
     return
 
 @app.route("/predict")
