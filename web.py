@@ -2,8 +2,9 @@ import os
 import numpy as np
 from flask import Flask, request, render_template, flash, redirect
 from werkzeug.utils import secure_filename
-from tensorflow import keras
+#from tensorflow import keras
 from google.cloud import automl
+
 # Import the automl credentials
 import json
 #with open("AUTOML-Model-d9e9236b7644.json", 'r') as load_f:
@@ -32,16 +33,16 @@ def allowed_file(filename):
 #global class_score
 
 # Convert inputted image to an array
-def process_image(file_path):
+def process_image(f):
    # Read the file.
-    with open(file_path, "rb") as content_file:
-        content = content_file.read()
+    content = f.read()
+
     image = automl.Image(image_bytes=content)
     payload = automl.ExamplePayload(image=image)
     # params is additional domain-specific parameters.
     # score_threshold is used to filter the result
     # https://cloud.google.com/automl/docs/reference/rpc/google.cloud.automl.v1#predictrequest
-    params = {"score_threshold": "0.8"}
+    params = {"score_threshold": "0.5"}
 
     request = automl.PredictRequest(
         name=model_full_id,
@@ -53,11 +54,10 @@ def process_image(file_path):
     for result in response.payload:
     #print("Predicted class name: {}".format(result.display_name))
     #print("Predicted class score: {}".format(result.classification.score))
-        global class_name
-        global class_score
         class_name = result.display_name
         class_score = result.classification.score
-    return render_template('upload.html', label = class_name, score = class_score, img = f.filename)
+    #return render_template('upload.html', label = class_name, score = class_score)
+    return "Predicted class name: {}".format(result.display_name)
     
 
 #@app.route("/")
@@ -77,22 +77,27 @@ def upload():
             flash("No selected file")
         if f and allowed_file(f.filename):
             #image_name = f.filename
+            """
             basepath = os.path.dirname(__file__)
             file_path = os.path.join(
                 basepath, 'static', secure_filename(f.filename)
             )
             f.save(file_path)
-            process_image(file_path)
-    return
+            """
+
+            
+    return process_image(f)
 
 @app.route("/predict")
 def predict():
+    """
     basepath = os.path.dirname(__file__)
     file_path = os.path.join(
         basepath, 'static', secure_filename(f.filename)
     )
     process_image(file_path)
-    return
+    """
+    return "page test"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9898, debug=True)

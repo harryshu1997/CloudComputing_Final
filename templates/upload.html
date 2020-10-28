@@ -19,7 +19,6 @@
     <p> <input type='submit' value='Classify!'> </p>
     {% if img %}
         <div>
-            <img src="{{url_for('static', filename=img)}}" />
             <p> <h3> {{ label }} </h3> </p>
             <p> <h3> {{ score }} </h3> </p>
         </div>
