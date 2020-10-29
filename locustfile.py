@@ -1,5 +1,15 @@
 # locust_test.py
+'''
+usage:
+pip3 install locustio
 
+locust -f locustfile.py --host=://xxx.com
+
+without web view:
+    locust -f locustfile.py --host=://xxx.com --no-web -c 1000 -r 100
+    -c: 1000 次点击
+    -r: 每秒加100
+'''
 
 import sys, random
 from locust import HttpLocust, TaskSet
