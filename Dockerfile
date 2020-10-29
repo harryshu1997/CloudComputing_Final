@@ -1,4 +1,5 @@
-FROM python:3.7.3-stretch
+FROM gcr.io/google_appengine/python
+RUN virtualenv -p python3.7 /env
 
 # Working Directory
 WORKDIR /web
@@ -10,7 +11,9 @@ COPY . /web/
 # Install packages from requirements.txt
 # hadolint ignore=DL3013
 RUN pip install --upgrade pip &&\
-    pip install --trusted-host pypi.python.org -r requirements.txt
+#    pip install --trusted-host pypi.python.org -r requirements.txt
+     pip install -r requirements.txt
+RUN pip install --upgrade google-cloud-automl
 
 # Expose port 80
 EXPOSE 80

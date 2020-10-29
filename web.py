@@ -5,17 +5,13 @@ from werkzeug.utils import secure_filename
 #from tensorflow import keras
 from google.cloud import automl
 
-# Import the automl credentials
-import json
-#with open("AUTOML-Model-d9e9236b7644.json", 'r') as load_f:
-#    json.load(load_f)
-
 # Get the model variables
 project_id = "automl-model-293309"
 model_id = "ICN1182672090231209984"
  
 # Import the doggy prediction model
-prediction_client = automl.PredictionServiceClient()
+#prediction_client = automl.PredictionServiceClient()
+prediction_client = automl.PredictionServiceClient().from_service_account_json("./AUTOML-Model-d9e9236b7644.json")
 
 # Get the full path of the model.
 model_full_id = automl.AutoMlClient.model_path(
@@ -37,19 +33,20 @@ def process_image(f):
    # Read the file.
     content = f.read()
 
-    image = automl.Image(image_bytes=content)
-    payload = automl.ExamplePayload(image=image)
+    image = automl.types.Image(image_bytes=content)
+    payload = automl.types.ExamplePayload(image=image)
     # params is additional domain-specific parameters.
     # score_threshold is used to filter the result
     # https://cloud.google.com/automl/docs/reference/rpc/google.cloud.automl.v1#predictrequest
     params = {"score_threshold": "0.5"}
 
-    request = automl.PredictRequest(
-        name=model_full_id,
-        payload=payload,
-        params=params
-    )
-    response = prediction_client.predict(request=request)
+    #request = automl.PredictRequest(
+    #request = (
+    #    name=model_full_id,
+    #    payload=payload,
+    #    params=params
+    #)
+    response = prediction_client.predict(model_full_id, payload=payload, params=params)
     #print("Prediction results:")
     for result in response.payload:
     #print("Predicted class name: {}".format(result.display_name))
