@@ -85,8 +85,8 @@ def upload():
             
     return process_image(f)
 
-@app.route("/predict")
-def predict():
+@app.route("/version")
+def version():
     """
     basepath = os.path.dirname(__file__)
     file_path = os.path.join(
@@ -94,7 +94,7 @@ def predict():
     )
     process_image(file_path)
     """
-    return "page test"
+    return "This is doggy classifier version 1.0, and thanks for choosing our website!"
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=9898, debug=True)
