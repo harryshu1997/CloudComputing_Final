@@ -8,13 +8,13 @@ This web application is deployed with Kubernetes and has passed the load test of
 
 ## Install
 * Create a virtualenv and source
-* run `make install`
+* Run `make install`
 
 ## Running app
 * Run in local: `python web.py`
 * Run in Docker: `./run_docker.sh`
 
-## Kubernetes Deployment and Locust testing
+## Kubernetes Deployment and Locust Testing
 This web application is deployed to Google Kubernetes Engine and has passed the load test of 1k+ requests served by multiple endpoints per second.
 
 ## Contributing

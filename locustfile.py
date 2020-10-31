@@ -49,11 +49,12 @@ class MyLocust(HttpUser):
     def getVersion(self):
         self.client.get('/version')
 
-    # @task
-    # def post_img(self):
-    #     with open('img.jpg', 'rb') as image:
-    #         self.client.post(
-    #             "/static/",
-    #             data={'id': self.id},
-    #             files={'photo': image}
-    #         )
+    @task
+    def postImg(self):
+        with open('img.jpg', 'rb') as image:
+            self.client.post(
+                files={'file': image},
+                url = "http://34.66.176.215:8080/"
+            )
+    
+
