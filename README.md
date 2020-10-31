@@ -10,6 +10,11 @@ This web application is deployed with Kubernetes and has passed the load test of
 ## Demo Video
 https://www.youtube.com/watch?v=1fUn561it5k
 
+## Deployed Web App Link
+http://34.66.176.215:8080/
+
+It is possible that a "FailedPrecondition: 400" will occur when requesting a classification result. That means the Google AutoML model deployment has been turned off (The billing of this Google AutoML is time-based and it's quite costly).
+
 ## Install
 * Create a virtualenv and source
 * Run `make install`
